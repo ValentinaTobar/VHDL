@@ -1,0 +1,59 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity BCD7Seg2 is
+
+	port
+	(
+		-- Input ports
+		SG : in STD_LOGIC;
+		IA : in STD_LOGIC;
+		IB : in STD_LOGIC;
+		IC : in STD_LOGIC;
+		ID : in STD_LOGIC;
+		-- Output ports
+		F : out std_logic_vector (7 downto 0)
+		
+	);
+	end BCD7Seg2;
+
+architecture BCD7Seg_Arch of BCD7Seg2 is
+
+	signal ABCD : std_logic_vector(3 downto 0);
+
+begin
+	
+	ABCD <= IA & IB & IC & ID;
+
+	signo : process (SG,IA,IB,IC,ID) is
+		begin
+		if SG='1' then
+			with (ABCD) select
+				F <= "10000001" when "0000",
+			  		  "11001111" when "0001",
+					  "10010010" when "0010",
+					  "10000110" when "0011",
+					  "11001100" when "0100",
+					  "10100100" when "0101",
+					  "11100000" when "0110",
+					  "10001111" when "0111",
+					  "10000000" when "1000",
+					  "10001100" when "1001",  
+					  "11111111" when others; 
+		elsif SG='0' then
+			with (ABCD) select
+				F <= "00000001" when "0000",
+			  		  "01001111" when "1110",
+					  "00010010" when "1101",
+					  "00000110" when "1100",
+					  "01001100" when "1011",
+					  "00100100" when "1010",
+					  "01100000" when "1001",
+					  "00001111" when "1000",
+					  "00000000" when "0111",
+					  "00001100" when "0110",  
+					  "01111111" when others;
+	 end process;
+end BCD7Seg_Arch;
